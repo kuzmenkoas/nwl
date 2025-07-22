@@ -97,7 +97,5 @@ void nwlTrackingAction::PostUserTrackingAction(const G4Track* track) {
     */
    
    //info->Print();
-
-   if(info->GetDetectorID() != "" || stopInDet) // if particle crossed or interacted in the detector
-       fEventAction->StoreParticleInfo(*info); 
+   fEventAction->StoreParticleInfo(*info); 
 }

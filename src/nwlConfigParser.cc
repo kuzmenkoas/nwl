@@ -24,6 +24,7 @@ nwlConfigParser::nwlConfigParser()
   b_Detectors = false;
   b_WriteNtuple = false;
   b_StoreAll = false;
+  b_StoreDetectorMissed = false;
   b_H1 = false;
   b_H2 = false;
 }
@@ -1322,7 +1323,27 @@ void nwlConfigParser::ReadOutput(){
 	      return;
 	    }//end else(StoreAllParticles)
 
-	  }//end else if(Type)
+	  } else if (Type.compare("StoreDetectorMissed") == 0) {
+
+		found = CurStr.find_first_of(" ");
+		if (found != string::npos) { CurStr = CurStr.substr(0, found); }
+
+		if (CurStr.compare("True") == 0) {
+
+		  b_StoreDetectorMissed = true;
+
+		}
+		else if (CurStr.compare("False") == 0) {
+
+		  b_StoreDetectorMissed = false;
+
+		}
+		else {
+		  oerr << "\n\nERROR: invalid value of [StoreDetectorMissed] in [Output] section" << endl;
+		  return;
+		}//end else(StoreAllParticles)
+
+	  } //end else if(Type)
 	  	  
 	}//end if(+)
 	

@@ -4,6 +4,11 @@
 #include "G4UserEventAction.hh"
 #include "nwlParticleInfo.hh"
 
+const G4int PDG_NEUTRON = 2112;
+const G4int PDG_GAMMA = 22;
+const G4String PROCESS_NCAPTURE = "nCapture";
+const G4String PROCESS_NEUTRONINELASTIC = "neutronInelastic";
+
 class nwlRunAction;
 
 class nwlEventAction : public G4UserEventAction
@@ -24,6 +29,8 @@ private:
   G4int     fPrintModulo;
   nwlRunAction* fRunAction;  
   nwlParticleInfoVector particles;
+  nwlParticleInfo* getParticleByTrackId(G4int trackID);
+  nwlParticleInfo* getParentNeutronParticle(nwlParticleInfo* p);
 };
 
 #endif

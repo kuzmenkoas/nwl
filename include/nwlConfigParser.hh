@@ -62,6 +62,11 @@ public:
     return b_StoreAll;
   }
 
+  bool StoreDetectorMissed()
+  {
+      return b_StoreDetectorMissed;
+  }
+
   bool CreateH1()
   {
     return b_H1;
@@ -122,6 +127,7 @@ private:
   bool b_Detectors;
   bool b_WriteNtuple;
   bool b_StoreAll;
+  bool b_StoreDetectorMissed;
   bool b_H1;
   bool b_H2;
 

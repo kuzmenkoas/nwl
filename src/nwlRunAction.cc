@@ -90,7 +90,17 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleSColumn("StopInDetectorID");
       analysisManager->CreateNtupleSColumn("ReactionInDetector");
       analysisManager->CreateNtupleDColumn("Weight");
-      
+      analysisManager->CreateNtupleIColumn("ParentNeutronTrackID");
+      analysisManager->CreateNtupleDColumn("ParentNeutronOriginX");
+      analysisManager->CreateNtupleDColumn("ParentNeutronOriginY");
+      analysisManager->CreateNtupleDColumn("ParentNeutronOriginZ");
+      analysisManager->CreateNtupleDColumn("ParentNeutronTime");
+      analysisManager->CreateNtupleDColumn("ParentNeutronOriginKine");
+      analysisManager->CreateNtupleSColumn("ParentNeutronOriginVolume");
+      analysisManager->CreateNtupleSColumn("ParentNeutronCreatorProcess");
+      analysisManager->CreateNtupleIColumn("ParentNeutronNucleusA");
+      analysisManager->CreateNtupleIColumn("ParentNeutronNucleusZ");
+
       analysisManager->FinishNtuple();
     }
 }
