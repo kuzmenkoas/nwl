@@ -5,7 +5,7 @@
 #include "G4TrackVector.hh"
 #include "G4TrackingManager.hh"
 #include "G4EventManager.hh"
-#include "G4NeutronHPManager.hh"
+#include "G4ParticleHPManager.hh"
 #include "G4HadronicProcess.hh"
 #include "G4Nucleus.hh"
 #include "G4VProcess.hh"
