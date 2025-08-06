@@ -24,8 +24,12 @@ G4bool nwlSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   G4Track* track = step->GetTrack();
 
   G4String dname = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName();
+  G4String vname = step->GetTrack()->GetLogicalVolumeAtVertex()->GetName();
 
   nwlParticleInfo* info = (nwlParticleInfo*)track->GetUserInformation();
+  if (vname != dname) info->SetOutsideDetector();
+
+  info->SetDeposit(step->GetTotalEnergyDeposit());
 
   if (info->GetDetectorID() == "")
     {

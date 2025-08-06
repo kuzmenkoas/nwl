@@ -90,6 +90,7 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleSColumn("StopInDetectorID");
       analysisManager->CreateNtupleSColumn("ReactionInDetector");
       analysisManager->CreateNtupleDColumn("Weight");
+      analysisManager->CreateNtupleDColumn("Deposit");
       analysisManager->CreateNtupleIColumn("ParentNeutronTrackID");
       analysisManager->CreateNtupleDColumn("ParentNeutronOriginX");
       analysisManager->CreateNtupleDColumn("ParentNeutronOriginY");

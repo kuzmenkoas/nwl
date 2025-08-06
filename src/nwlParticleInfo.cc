@@ -21,6 +21,8 @@ nwlParticleInfo::nwlParticleInfo()
         stopInDetectorID = "";
         reactionInTheDetector = "";
         weight = 0;
+        deposit = 0;
+        isOutside = false;
 }
 
 nwlParticleInfo::~nwlParticleInfo()
@@ -107,3 +109,6 @@ void nwlParticleInfo::SetFinalInfo(G4bool StopInDet, G4String detId, G4String De
 }
 
 
+void nwlParticleInfo::SetDeposit(G4double dE) {
+        deposit += dE;
+}

@@ -24,6 +24,9 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 
 	void SetFinalInfo(G4bool StopInDet, G4String detId, G4String ctorDetProcess);
 
+	void SetDeposit(G4double);
+	void SetOutsideDetector() {isOutside = true;}
+
 	G4int GetTrackID() {return trackID;}
 	G4int GetParentID() {return parentID;}
 	G4int GetPDG() {return pdg;}
@@ -43,6 +46,8 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4String GetStopInDetectorID() {return stopInDetectorID;}
 	G4String GetReactionInTheDetector() {return reactionInTheDetector;}
 	G4double GetWeight() {return weight;}
+	G4double GetDeposit() {return deposit;}
+	G4bool GetOutsideDetector() {return isOutside;}
 
         void Write(std::ostream& outs); 
 
@@ -66,6 +71,8 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4String stopInDetectorID;
 	G4String reactionInTheDetector;
 	G4double weight;
+	G4double deposit;
+	G4bool isOutside;
 };
 
 typedef std::vector<nwlParticleInfo> nwlParticleInfoVector;
