@@ -1,6 +1,7 @@
 #include "nwlParticleInfo.hh"
 #include "G4VPhysicalVolume.hh"
 #include "globals.hh"
+#include "nwlConfigParser.hh"
 
 using namespace CLHEP;
 
@@ -23,6 +24,12 @@ nwlParticleInfo::nwlParticleInfo()
         weight = 0;
         deposit = 0;
         isOutside = false;
+
+        nwlConfigParser::Instance()->GetDetector(m_Detector);
+        for (std::vector<std::string>::iterator it = m_Detector.begin(); it != m_Detector.end(); it++) {
+                nwlDetRecord tmp{false, *it, 0, 0, G4ThreeVector(0,0,0), G4ThreeVector(0,0,0), 0, 0, false};
+                detRecord.push_back(tmp);
+        }
 }
 
 nwlParticleInfo::~nwlParticleInfo()
@@ -99,6 +106,16 @@ void nwlParticleInfo::SetDetectorInfo(G4String DetId, G4double Time, G4double Ki
   entrancePoint = EntrancePoint;
   entranceDirection = EntranceDir;
   weight = W;
+  for (G4int i = 0; i < detRecord.size(); i++) {
+        if (detRecord[i].detectorId == DetId) {
+                detRecord[i].firstHit = true;
+                detRecord[i].detectorTime = Time;
+                detRecord[i].detectorKineticEnergy = Kine;
+                detRecord[i].entrancePoint = EntrancePoint;
+                detRecord[i].entranceDirection = EntranceDir;
+                detRecord[i].weight = W;
+        }
+  }
 }
 
 void nwlParticleInfo::SetFinalInfo(G4bool StopInDet, G4String detId, G4String DetProcess)
@@ -109,6 +126,66 @@ void nwlParticleInfo::SetFinalInfo(G4bool StopInDet, G4String detId, G4String De
 }
 
 
-void nwlParticleInfo::SetDeposit(G4double dE) {
+void nwlParticleInfo::SetDeposit(G4double dE, G4String DetId) {
         deposit += dE;
+        for (G4int i = 0; i < detRecord.size(); i++) {
+        if (detRecord[i].detectorId == DetId) {
+                detRecord[i].Deposit += dE;
+        }
+  }
+}
+
+G4bool nwlParticleInfo::GetFirstDetectorHit(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].firstHit;
+        }
+}
+
+void nwlParticleInfo::SetOutsideDetector(G4String detId) {
+        isOutside = true;
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) detRecord[i].isOutside = true;
+        }
+}
+
+G4double nwlParticleInfo::GetDetectorDeposit(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].Deposit;
+        }
+}
+
+G4bool nwlParticleInfo::GetOutsideDetector(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].isOutside;
+        }
+}
+
+G4double nwlParticleInfo::GetDetectorKineticEnergy(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].detectorKineticEnergy;
+        }
+}
+
+G4double nwlParticleInfo::GetDetectorTime(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].detectorTime;
+        }
+}
+
+G4ThreeVector& nwlParticleInfo::GetEntrancePoint(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].entrancePoint;
+        }
+}
+
+G4ThreeVector& nwlParticleInfo::GetEntranceDirection(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].entranceDirection;
+        }
+}
+
+G4double nwlParticleInfo::GetWeight(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].weight;
+        }
 }

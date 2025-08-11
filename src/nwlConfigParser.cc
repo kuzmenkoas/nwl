@@ -1165,8 +1165,13 @@ void nwlConfigParser::ReadOutput(){
 	    if(found!=string::npos){ CurStr = CurStr.substr(0, found); }
 	    
 	    H1D.Xmax = atof(CurStr.c_str());
-	    
-	    m_H1Ds.push_back(H1D);
+		H1D.DetId = "All";
+	    if ( (H1D.PhysQ.compare("Energy")==0) || (H1D.PhysQ.compare("Time")==0) || (H1D.PhysQ.compare("X")==0) || (H1D.PhysQ.compare("Y")==0) || (H1D.PhysQ.compare("Z")==0) || (H1D.PhysQ.compare("Deposit")==0)) {
+			for (int i = 0; i < m_Detectors.size(); i++) {
+				H1D.DetId = m_Detectors[i];
+				m_H1Ds.push_back(H1D);
+			}
+		} else m_H1Ds.push_back(H1D);
 	    b_H1 = true;
 
 	  } else if(Type.compare("H2D")==0){

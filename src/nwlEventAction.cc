@@ -55,6 +55,9 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
 
     nwlConfigParser* cfg = nwlConfigParser::Instance();
 
+    std::vector<std::string> m_Detectors;
+    cfg->GetDetector(m_Detectors);
+
     nwlParticleInfoVector::iterator it;
 
     // one may put some selection logic here
@@ -68,18 +71,20 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
             for (h1 = h1map.begin(); h1 != h1map.end(); ++h1)
             {
                 G4double val;
-                if ((*h1).second == "Energy") { val = (*it).GetDetectorKineticEnergy(); }
-                else if ((*h1).second == "Time") { val = (*it).GetDetectorTime(); }
-                else if ((*h1).second == "X") { val = (*it).GetOriginPoint().x(); }
-                else if ((*h1).second == "Y") { val = (*it).GetOriginPoint().y(); }
-                else if ((*h1).second == "Z") { val = (*it).GetOriginPoint().z(); }
-                else if ((*h1).second == "ProcessID") { val = fRunAction->GetProcessID((*it).GetCreatorProcess()); }
-                else if ((*h1).second == "NucleusA") { val = (*it).GetOriginNucleusA(); }
-                else if ((*h1).second == "NucleusZ") { val = (*it).GetOriginNucleusZ(); }
-                else if ((*h1).second == "DetectorID") { val = fRunAction->GetDetectorID((*it).GetDetectorID()); }
-                else if ((*h1).second == "PDG") { val = (*it).GetPDG(); }
-                else if ((*h1).second == "Deposit") { val = GetTotalDeposit(&(*it)); }
-
+                std::string PhysQ = (*h1).second.substr(0, (*h1).second.find("_"));
+                std::string detId = (*h1).second.substr((*h1).second.find("_")+1, (*h1).second.size());
+                // G4cout << (*h1).second << G4endl;
+                if (PhysQ == "Energy") { val = (*it).GetDetectorKineticEnergy(detId); }
+                else if (PhysQ == "Time") { val = (*it).GetDetectorTime(detId); }
+                else if (PhysQ == "X") { val = (*it).GetOriginPoint().x(); }
+                else if (PhysQ == "Y") { val = (*it).GetOriginPoint().y(); }
+                else if (PhysQ == "Z") { val = (*it).GetOriginPoint().z(); }
+                else if (PhysQ == "ProcessID") { val = fRunAction->GetProcessID((*it).GetCreatorProcess()); }
+                else if (PhysQ == "NucleusA") { val = (*it).GetOriginNucleusA(); }
+                else if (PhysQ == "NucleusZ") { val = (*it).GetOriginNucleusZ(); }
+                else if (PhysQ == "DetectorID") { val = fRunAction->GetDetectorID((*it).GetDetectorID()); }
+                else if (PhysQ == "PDG") { val = (*it).GetPDG(); }
+                else if (PhysQ == "Deposit") { val = GetDetectorTotalDeposit(&(*it), detId);}
                 G4double weight = (*it).GetWeight();
                 analysisManager->FillH1((*h1).first, val, weight);
             }
@@ -183,7 +188,9 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
             analysisManager->FillNtupleSColumn(counter++, it->GetStopInDetectorID());
             analysisManager->FillNtupleSColumn(counter++, it->GetReactionInTheDetector());
             analysisManager->FillNtupleDColumn(counter++, it->GetWeight());
-            analysisManager->FillNtupleDColumn(counter++, GetTotalDeposit(&(*it)));
+            for (std::vector<std::string>::iterator itDet = m_Detectors.begin(); itDet != m_Detectors.end(); itDet++) {
+                analysisManager->FillNtupleDColumn(counter++, GetDetectorTotalDeposit(&(*it), *itDet));
+            }
 
             nwlParticleInfo* parentNeutron = getParentNeutronParticle(&(*it));
             if (parentNeutron != NULL) {
@@ -242,6 +249,23 @@ G4double nwlEventAction::GetTotalDeposit(nwlParticleInfo* p) {
             for (G4int i = 0; i < particleID.size(); ++i) {
                 if (it->GetParentID() == particleID[i]) {
                     dE += it->GetDeposit();
+                    particleID.push_back(it->GetTrackID());
+                }
+            }
+        }
+    } else return -1;
+    return dE;
+}
+
+G4double nwlEventAction::GetDetectorTotalDeposit(nwlParticleInfo* p, G4String detId) {
+    G4double dE = p->GetDetectorDeposit(detId);
+    std::vector<G4int> particleID;
+    particleID.push_back(p->GetTrackID());
+    if (p->GetOutsideDetector(detId)) {
+        for (nwlParticleInfoVector::iterator it = particles.begin(); it != particles.end(); ++it) {
+            for (G4int i = 0; i < particleID.size(); ++i) {
+                if (it->GetParentID() == particleID[i]) {
+                    dE += it->GetDetectorDeposit(detId);
                     particleID.push_back(it->GetTrackID());
                 }
             }

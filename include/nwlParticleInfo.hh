@@ -10,6 +10,18 @@
 
 class G4VPhysicalVolume;
 
+struct nwlDetRecord {
+	G4bool firstHit;
+	G4String detectorId;
+	G4double detectorTime;
+	G4double detectorKineticEnergy;
+	G4ThreeVector entrancePoint;
+	G4ThreeVector entranceDirection;
+	G4double weight;
+	G4double Deposit;
+	G4bool isOutside;
+};
+
 class  nwlParticleInfo : public G4VUserTrackInformation
 {
     public:
@@ -24,8 +36,9 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 
 	void SetFinalInfo(G4bool StopInDet, G4String detId, G4String ctorDetProcess);
 
-	void SetDeposit(G4double);
-	void SetOutsideDetector() {isOutside = true;}
+	G4bool GetFirstDetectorHit(G4String); 
+	void SetDeposit(G4double, G4String);
+	void SetOutsideDetector(G4String);
 
 	G4int GetTrackID() {return trackID;}
 	G4int GetParentID() {return parentID;}
@@ -47,7 +60,14 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4String GetReactionInTheDetector() {return reactionInTheDetector;}
 	G4double GetWeight() {return weight;}
 	G4double GetDeposit() {return deposit;}
+	G4double GetDetectorDeposit(G4String);
+	G4bool GetOutsideDetector(G4String);
 	G4bool GetOutsideDetector() {return isOutside;}
+	G4double GetDetectorKineticEnergy(G4String);
+	G4double GetDetectorTime(G4String);
+	G4ThreeVector& GetEntrancePoint(G4String);
+	G4ThreeVector& GetEntranceDirection(G4String);
+	G4double GetWeight(G4String);
 
         void Write(std::ostream& outs); 
 
@@ -73,6 +93,8 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4double weight;
 	G4double deposit;
 	G4bool isOutside;
+	std::vector<std::string> m_Detector;
+	std::vector<nwlDetRecord> detRecord;
 };
 
 typedef std::vector<nwlParticleInfo> nwlParticleInfoVector;

@@ -18,6 +18,9 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
   auto analysisManager = G4AnalysisManager::Instance();
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
+  std::vector<std::string> m_Detectors;
+  nwlConfigParser::Instance()->GetDetector(m_Detectors);
+
   // Create directories
   //analysisManager->SetHistoDirectoryName("histograms");
   //analysisManager->SetNtupleDirectoryName("ntuple");
@@ -35,12 +38,19 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       for (it=H1Ds.begin(); it!=H1Ds.end(); ++it)
 	{
 	  // Creating histograms
-	  G4int id = analysisManager->CreateH1((*it).PhysQ, (*it).PhysQ, (*it).Nbins, (*it).Xmin, (*it).Xmax);
-//	  std::vector<G4double> edges;
-//	  int i;
-//          for(i=0;i<(*it).Nbins;i++) edges.push_back((*it).Xmin+i*((*it).Xmax-(*it).Xmin)/(*it).Nbins);
-//          G4int id = analysisManager->CreateH1((*it).PhysQ, (*it).PhysQ, edges);
-	  H1map[id] = (*it).PhysQ;
+//     if (((*it).PhysQ == "Energy") || ((*it).PhysQ == "Time") || ((*it).PhysQ == "X") || ((*it).PhysQ == "Y") || ((*it).PhysQ == "Z") || ((*it).PhysQ == "Deposit")) {
+//       for (std::vector<std::string>::iterator itDet = m_Detectors.begin(); itDet != m_Detectors.end(); itDet++) {
+// 	      G4int id = analysisManager->CreateH1((*it).PhysQ+*itDet, (*it).PhysQ+*itDet, (*it).Nbins, (*it).Xmin, (*it).Xmax);
+// //	  std::vector<G4double> edges;
+// //	  int i;
+// //          for(i=0;i<(*it).Nbins;i++) edges.push_back((*it).Xmin+i*((*it).Xmax-(*it).Xmin)/(*it).Nbins);
+// //          G4int id = analysisManager->CreateH1((*it).PhysQ, (*it).PhysQ, edges);
+// 	      H1map[id] = (*it).PhysQ;
+//       }
+//     } else {
+      G4int id = analysisManager->CreateH1((*it).PhysQ+"_"+(*it).DetId, (*it).PhysQ+"_"+(*it).DetId, (*it).Nbins, (*it).Xmin, (*it).Xmax);
+	    H1map[id] = (*it).PhysQ+"_"+(*it).DetId;
+    // }
 	}
     }
   
@@ -64,6 +74,7 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
   // Creating ntuple
   if (cfg->WriteNtuple()) 
     {
+      for (std::vector<std::string>::iterator it = m_Detectors.begin(); it != m_Detectors.end(); it++) {
       analysisManager->CreateNtuple("NWL", "Well Logging Simu");
       analysisManager->CreateNtupleIColumn("EventID");
       analysisManager->CreateNtupleIColumn("TrackID");
@@ -90,7 +101,9 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleSColumn("StopInDetectorID");
       analysisManager->CreateNtupleSColumn("ReactionInDetector");
       analysisManager->CreateNtupleDColumn("Weight");
-      analysisManager->CreateNtupleDColumn("Deposit");
+      for (std::vector<std::string>::iterator it = m_Detectors.begin(); it != m_Detectors.end(); it++) {
+        analysisManager->CreateNtupleDColumn("Deposit_"+*it);
+      }
       analysisManager->CreateNtupleIColumn("ParentNeutronTrackID");
       analysisManager->CreateNtupleDColumn("ParentNeutronOriginX");
       analysisManager->CreateNtupleDColumn("ParentNeutronOriginY");
@@ -103,6 +116,7 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleIColumn("ParentNeutronNucleusZ");
 
       analysisManager->FinishNtuple();
+    }
     }
 }
 
@@ -150,7 +164,7 @@ void nwlRunAction::BeginOfRunAction(const G4Run* aRun)
   // bool WriteNtuple;
 
   auto analysisManager = G4AnalysisManager::Instance();
-  analysisManager->OpenFile("run_"+std::to_string(jobID)+".csv");
+  analysisManager->OpenFile("run_"+std::to_string(jobID)+".root");
   /*
     if(cfg->GetOutput(H1Ds, H2Ds, WriteNtuple))
     {

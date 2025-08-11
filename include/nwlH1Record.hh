@@ -6,6 +6,7 @@
 struct nwlH1Record
 {
   std::string PhysQ;
+  std::string DetId;
   int Nbins;
   double Xmin;
   double Xmax;
