@@ -74,7 +74,6 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
   // Creating ntuple
   if (cfg->WriteNtuple()) 
     {
-      for (std::vector<std::string>::iterator it = m_Detectors.begin(); it != m_Detectors.end(); it++) {
       analysisManager->CreateNtuple("NWL", "Well Logging Simu");
       analysisManager->CreateNtupleIColumn("EventID");
       analysisManager->CreateNtupleIColumn("TrackID");
@@ -116,7 +115,6 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleIColumn("ParentNeutronNucleusZ");
 
       analysisManager->FinishNtuple();
-    }
     }
 }
 
