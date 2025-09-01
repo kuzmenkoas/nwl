@@ -20,6 +20,9 @@ struct nwlDetRecord {
 	G4double weight;
 	G4double Deposit;
 	G4bool isOutside;
+	G4bool stopInTheDetector;
+	G4String stopInDetectorID;
+	G4String reactionInTheDetector;
 };
 
 class  nwlParticleInfo : public G4VUserTrackInformation
@@ -68,6 +71,9 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4ThreeVector& GetEntrancePoint(G4String);
 	G4ThreeVector& GetEntranceDirection(G4String);
 	G4double GetWeight(G4String);
+	G4bool GetStopInTheDetector(G4String detId);
+	G4String GetStopInDetectorID(G4String detId);
+	G4String GetReactionInTheDetector(G4String detId);
 
         void Write(std::ostream& outs); 
 
@@ -95,6 +101,7 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4bool isOutside;
 	std::vector<std::string> m_Detector;
 	std::vector<nwlDetRecord> detRecord;
+	G4int GetDetectorRecordID(G4String detId);
 };
 
 typedef std::vector<nwlParticleInfo> nwlParticleInfoVector;

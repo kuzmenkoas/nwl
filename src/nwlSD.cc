@@ -24,6 +24,9 @@ G4bool nwlSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   G4Track* track = step->GetTrack();
 
   G4String dname = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName();
+  G4VPhysicalVolume* dpostvolume = step->GetPostStepPoint()->GetTouchableHandle()->GetVolume();
+  G4String dpostname = "";
+  if (dpostvolume) dpostname = dpostvolume->GetName();
   G4String vname = step->GetTrack()->GetLogicalVolumeAtVertex()->GetName();
 
   nwlParticleInfo* info = (nwlParticleInfo*)track->GetUserInformation();
@@ -42,6 +45,11 @@ G4bool nwlSD::ProcessHits(G4Step* step, G4TouchableHistory*)
                              track->GetWeight());
        return true;
     }
+  if ((dpostname != "" && dname != dpostname) || step->GetTrack()->GetTrackStatus() == fStopAndKill) {
+    G4String procname = step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+    G4bool stopindet = step->GetTrack()->GetTrackStatus() == fStopAndKill;
+    info->SetFinalInfo(stopindet, dname, procname);
+  }
   return false;
 }
 

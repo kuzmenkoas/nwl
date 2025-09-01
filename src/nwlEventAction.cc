@@ -52,7 +52,6 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
 {
     // Store particle info to file and histo
     auto analysisManager = G4AnalysisManager::Instance();
-
     nwlConfigParser* cfg = nwlConfigParser::Instance();
 
     std::vector<std::string> m_Detectors;
@@ -73,7 +72,6 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
                 G4double val;
                 std::string PhysQ = (*h1).second.substr(0, (*h1).second.find("_"));
                 std::string detId = (*h1).second.substr((*h1).second.find("_")+1, (*h1).second.size());
-                // G4cout << (*h1).second << G4endl;
                 if (PhysQ == "Energy") { val = (*it).GetDetectorKineticEnergy(detId); }
                 else if (PhysQ == "Time") { val = (*it).GetDetectorTime(detId); }
                 else if (PhysQ == "X") { val = (*it).GetOriginPoint().x(); }
@@ -158,55 +156,55 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
                 if (it->GetPDG() != PDG_GAMMA && it->GetPDG() != PDG_NEUTRON) continue;
             }
 
-            if (!cfg->StoreDetectorMissed()) {
-                if (it->GetDetectorID() == "" && !it->GetStopInTheDetector()) continue; // if particle neither crossed nor interacted in the detector
-            }
-
-            G4int counter = 0;
-            analysisManager->FillNtupleIColumn(counter++, event->GetEventID());
-            analysisManager->FillNtupleIColumn(counter++, it->GetTrackID());
-            analysisManager->FillNtupleIColumn(counter++, it->GetParentID());
-            analysisManager->FillNtupleIColumn(counter++, it->GetPDG());
-            analysisManager->FillNtupleDColumn(counter++, it->GetOriginPoint().x());
-            analysisManager->FillNtupleDColumn(counter++, it->GetOriginPoint().y());
-            analysisManager->FillNtupleDColumn(counter++, it->GetOriginPoint().z());
-            analysisManager->FillNtupleDColumn(counter++, it->GetOriginTime());
-            analysisManager->FillNtupleDColumn(counter++, it->GetOriginKineticEnergy());
-            analysisManager->FillNtupleSColumn(counter++, it->GetOriginVolumeName());
-            analysisManager->FillNtupleSColumn(counter++, it->GetCreatorProcess());
-            analysisManager->FillNtupleIColumn(counter++, it->GetOriginNucleusA());
-            analysisManager->FillNtupleIColumn(counter++, it->GetOriginNucleusZ());
-            analysisManager->FillNtupleSColumn(counter++, it->GetDetectorID());
-            analysisManager->FillNtupleDColumn(counter++, it->GetEntrancePoint().x());
-            analysisManager->FillNtupleDColumn(counter++, it->GetEntrancePoint().y());
-            analysisManager->FillNtupleDColumn(counter++, it->GetEntrancePoint().z());
-            analysisManager->FillNtupleDColumn(counter++, it->GetEntranceDirection().x());
-            analysisManager->FillNtupleDColumn(counter++, it->GetEntranceDirection().y());
-            analysisManager->FillNtupleDColumn(counter++, it->GetEntranceDirection().z());
-            analysisManager->FillNtupleDColumn(counter++, it->GetDetectorTime());
-            analysisManager->FillNtupleDColumn(counter++, it->GetDetectorKineticEnergy());
-            analysisManager->FillNtupleSColumn(counter++, it->GetStopInDetectorID());
-            analysisManager->FillNtupleSColumn(counter++, it->GetReactionInTheDetector());
-            analysisManager->FillNtupleDColumn(counter++, it->GetWeight());
+            G4int iNtuple = 0;
             for (std::vector<std::string>::iterator itDet = m_Detectors.begin(); itDet != m_Detectors.end(); itDet++) {
-                analysisManager->FillNtupleDColumn(counter++, GetDetectorTotalDeposit(&(*it), *itDet));
-            }
+                if (!cfg->StoreDetectorMissed()) {
+                    if (it->GetFirstDetectorHit(*itDet) && !it->GetStopInTheDetector(*itDet)) continue; // if particle neither crossed nor interacted in the detector
+                }
+                G4int counter = 0;
+                analysisManager->FillNtupleIColumn(iNtuple, counter++, event->GetEventID());
+                analysisManager->FillNtupleIColumn(iNtuple, counter++, it->GetTrackID());
+                analysisManager->FillNtupleIColumn(iNtuple, counter++, it->GetParentID());
+                analysisManager->FillNtupleIColumn(iNtuple, counter++, it->GetPDG());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetOriginPoint().x());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetOriginPoint().y());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetOriginPoint().z());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetOriginTime());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetOriginKineticEnergy());
+                analysisManager->FillNtupleSColumn(iNtuple, counter++, it->GetOriginVolumeName());
+                analysisManager->FillNtupleSColumn(iNtuple, counter++, it->GetCreatorProcess());
+                analysisManager->FillNtupleIColumn(iNtuple, counter++, it->GetOriginNucleusA());
+                analysisManager->FillNtupleIColumn(iNtuple, counter++, it->GetOriginNucleusZ());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetEntrancePoint(*itDet).x());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetEntrancePoint(*itDet).y());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetEntrancePoint(*itDet).z());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetEntranceDirection(*itDet).x());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetEntranceDirection(*itDet).y());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetEntranceDirection(*itDet).z());
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetDetectorTime(*itDet));
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetDetectorKineticEnergy(*itDet));
+                analysisManager->FillNtupleSColumn(iNtuple, counter++, it->GetStopInDetectorID());
+                analysisManager->FillNtupleSColumn(iNtuple, counter++, it->GetReactionInTheDetector(*itDet));
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, it->GetWeight(*itDet));
+                analysisManager->FillNtupleDColumn(iNtuple, counter++, GetDetectorTotalDeposit(&(*it), *itDet));
+            
 
-            nwlParticleInfo* parentNeutron = getParentNeutronParticle(&(*it));
-            if (parentNeutron != NULL) {
-                analysisManager->FillNtupleIColumn(counter++, parentNeutron->GetTrackID());
-                analysisManager->FillNtupleDColumn(counter++, parentNeutron->GetOriginPoint().x());
-                analysisManager->FillNtupleDColumn(counter++, parentNeutron->GetOriginPoint().y());
-                analysisManager->FillNtupleDColumn(counter++, parentNeutron->GetOriginPoint().z());
-                analysisManager->FillNtupleDColumn(counter++, parentNeutron->GetOriginTime());
-                analysisManager->FillNtupleDColumn(counter++, parentNeutron->GetOriginKineticEnergy());
-                analysisManager->FillNtupleSColumn(counter++, parentNeutron->GetOriginVolumeName());
-                analysisManager->FillNtupleSColumn(counter++, parentNeutron->GetCreatorProcess());
-                analysisManager->FillNtupleIColumn(counter++, parentNeutron->GetOriginNucleusA());
-                analysisManager->FillNtupleIColumn(counter++, parentNeutron->GetOriginNucleusZ());
-            }
+                nwlParticleInfo* parentNeutron = getParentNeutronParticle(&(*it));
+                if (parentNeutron != NULL) {
+                    analysisManager->FillNtupleIColumn(iNtuple, counter++, parentNeutron->GetTrackID());
+                    analysisManager->FillNtupleDColumn(iNtuple, counter++, parentNeutron->GetOriginPoint().x());
+                    analysisManager->FillNtupleDColumn(iNtuple, counter++, parentNeutron->GetOriginPoint().y());
+                    analysisManager->FillNtupleDColumn(iNtuple, counter++, parentNeutron->GetOriginPoint().z());
+                    analysisManager->FillNtupleDColumn(iNtuple, counter++, parentNeutron->GetOriginTime());
+                    analysisManager->FillNtupleDColumn(iNtuple, counter++, parentNeutron->GetOriginKineticEnergy());
+                    analysisManager->FillNtupleSColumn(iNtuple, counter++, parentNeutron->GetOriginVolumeName());
+                    analysisManager->FillNtupleSColumn(iNtuple, counter++, parentNeutron->GetCreatorProcess());
+                    analysisManager->FillNtupleIColumn(iNtuple, counter++, parentNeutron->GetOriginNucleusA());
+                    analysisManager->FillNtupleIColumn(iNtuple, counter++, parentNeutron->GetOriginNucleusZ());
+                }
 
-            analysisManager->AddNtupleRow();
+                analysisManager->AddNtupleRow(iNtuple++);
+            }
         }
     }
 

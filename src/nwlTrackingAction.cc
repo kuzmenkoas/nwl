@@ -68,34 +68,34 @@ void nwlTrackingAction::PreUserTrackingAction(const G4Track* track)
 }
 
 void nwlTrackingAction::PostUserTrackingAction(const G4Track* track) {
-    G4String volname = track->GetVolume()->GetName();
-    G4bool stopInDet = false;
-    G4String detId = "";
-    if ( fEventAction->GetRunAction()->IsSensitive(volname) )
-    {
-	detId = volname;
-        stopInDet = true;
-    }
-
     nwlParticleInfo* info = (nwlParticleInfo*)(track->GetUserInformation());
+  //   G4String volname = track->GetVolume()->GetName();
+  //   G4bool stopInDet = false;
+  //   G4String detId = "";
+  //   if ( fEventAction->GetRunAction()->IsSensitive(volname) )
+  //   {
+	//       detId = volname;
+  //       stopInDet = true;
+  //   }
+
  
-    G4VProcess* proc =  G4EventManager::GetEventManager()->GetTrackingManager()->GetSteppingManager()->GetfCurrentProcess();
+  //   G4VProcess* proc =  G4EventManager::GetEventManager()->GetTrackingManager()->GetSteppingManager()->GetfCurrentProcess();
 
-    info->SetFinalInfo(stopInDet, detId, proc->GetProcessName());
+  //   info->SetFinalInfo(stopInDet, detId, proc->GetProcessName());
 
-    /*G4TrackVector* secondaries = G4EventManager::GetEventManager()->GetTrackingManager()->GimmeSecondaries();
-    G4TrackVector::iterator it;
-    for(it = secondaries->begin(); it!= secondaries->end(); it++)
-    {
-       G4int pdgcode = (*it)->GetDefinition()->GetPDGEncoding();
-       if(pdgcode == 1000010030) // He3(n,p)H3, tritium detected
-         {
-           mHit = 1;
-	 }
+  //   /*G4TrackVector* secondaries = G4EventManager::GetEventManager()->GetTrackingManager()->GimmeSecondaries();
+  //   G4TrackVector::iterator it;
+  //   for(it = secondaries->begin(); it!= secondaries->end(); it++)
+  //   {
+  //      G4int pdgcode = (*it)->GetDefinition()->GetPDGEncoding();
+  //      if(pdgcode == 1000010030) // He3(n,p)H3, tritium detected
+  //        {
+  //          mHit = 1;
+	//  }
 
-    }
-    */
+  //   }
+  //   */
    
-   //info->Print();
+  //  //info->Print();
    fEventAction->StoreParticleInfo(*info); 
 }

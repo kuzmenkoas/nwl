@@ -74,7 +74,9 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
   // Creating ntuple
   if (cfg->WriteNtuple()) 
     {
-      analysisManager->CreateNtuple("NWL", "Well Logging Simu");
+      G4int i = 0;
+      for (std::vector<std::string>::iterator it = m_Detectors.begin(); it != m_Detectors.end(); it++) {
+      analysisManager->CreateNtuple("NWL_"+*it, "Well Logging Simu");
       analysisManager->CreateNtupleIColumn("EventID");
       analysisManager->CreateNtupleIColumn("TrackID");
       analysisManager->CreateNtupleIColumn("ParentID");
@@ -88,7 +90,6 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleSColumn("CreatorProcess");
       analysisManager->CreateNtupleIColumn("NucleusA");
       analysisManager->CreateNtupleIColumn("NucleusZ");
-      analysisManager->CreateNtupleSColumn("DetectorID");
       analysisManager->CreateNtupleDColumn("EntranceX");
       analysisManager->CreateNtupleDColumn("EntranceY");
       analysisManager->CreateNtupleDColumn("EntranceZ");
@@ -100,9 +101,7 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleSColumn("StopInDetectorID");
       analysisManager->CreateNtupleSColumn("ReactionInDetector");
       analysisManager->CreateNtupleDColumn("Weight");
-      for (std::vector<std::string>::iterator it = m_Detectors.begin(); it != m_Detectors.end(); it++) {
-        analysisManager->CreateNtupleDColumn("Deposit_"+*it);
-      }
+      analysisManager->CreateNtupleDColumn("Deposit");
       analysisManager->CreateNtupleIColumn("ParentNeutronTrackID");
       analysisManager->CreateNtupleDColumn("ParentNeutronOriginX");
       analysisManager->CreateNtupleDColumn("ParentNeutronOriginY");
@@ -114,7 +113,8 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       analysisManager->CreateNtupleIColumn("ParentNeutronNucleusA");
       analysisManager->CreateNtupleIColumn("ParentNeutronNucleusZ");
 
-      analysisManager->FinishNtuple();
+      analysisManager->FinishNtuple(i++);
+    }
     }
 }
 

@@ -27,7 +27,7 @@ nwlParticleInfo::nwlParticleInfo()
 
         nwlConfigParser::Instance()->GetDetector(m_Detector);
         for (std::vector<std::string>::iterator it = m_Detector.begin(); it != m_Detector.end(); it++) {
-                nwlDetRecord tmp{false, *it, 0, 0, G4ThreeVector(0,0,0), G4ThreeVector(0,0,0), 0, 0, false};
+                nwlDetRecord tmp{false, *it, 0, 0, G4ThreeVector(0,0,0), G4ThreeVector(0,0,0), 0, 0, false, false, "", ""};
                 detRecord.push_back(tmp);
         }
 }
@@ -123,6 +123,13 @@ void nwlParticleInfo::SetFinalInfo(G4bool StopInDet, G4String detId, G4String De
    stopInTheDetector = StopInDet;
    stopInDetectorID = detId;
    reactionInTheDetector = DetProcess;
+   for (G4int i = 0; i < detRecord.size(); i++) {
+        if (detRecord[i].detectorId == detId) {
+                detRecord[i].stopInTheDetector = StopInDet;
+                detRecord[i].stopInDetectorID = detId;
+                detRecord[i].reactionInTheDetector = DetProcess;
+        }
+   }
 }
 
 
@@ -187,5 +194,29 @@ G4ThreeVector& nwlParticleInfo::GetEntranceDirection(G4String detId) {
 G4double nwlParticleInfo::GetWeight(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].weight;
+        }
+}
+
+G4bool nwlParticleInfo::GetStopInTheDetector(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].stopInTheDetector;
+        }
+}
+
+G4String nwlParticleInfo::GetStopInDetectorID(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].stopInDetectorID;
+        }
+}
+
+G4String nwlParticleInfo::GetReactionInTheDetector(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return detRecord[i].reactionInTheDetector;
+        }
+}
+
+G4int nwlParticleInfo::GetDetectorRecordID(G4String detId) {
+        for (G4int i = 0; i < detRecord.size(); i++) {
+                if (detRecord[i].detectorId == detId) return i;
         }
 }
