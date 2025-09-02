@@ -162,7 +162,7 @@ void nwlRunAction::BeginOfRunAction(const G4Run* aRun)
   // bool WriteNtuple;
 
   auto analysisManager = G4AnalysisManager::Instance();
-  analysisManager->OpenFile("run_"+std::to_string(jobID)+".root");
+  analysisManager->OpenFile("run_"+std::to_string(jobID)+".csv");
   /*
     if(cfg->GetOutput(H1Ds, H2Ds, WriteNtuple))
     {
