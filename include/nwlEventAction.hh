@@ -31,7 +31,6 @@ private:
   nwlParticleInfoVector particles;
   nwlParticleInfo* getParticleByTrackId(G4int trackID);
   nwlParticleInfo* getParentNeutronParticle(nwlParticleInfo* p);
-  G4double GetTotalDeposit(nwlParticleInfo*);
   G4double GetDetectorTotalDeposit(nwlParticleInfo*, G4String);
 };
 

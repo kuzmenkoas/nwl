@@ -1166,7 +1166,7 @@ void nwlConfigParser::ReadOutput(){
 	    
 	    H1D.Xmax = atof(CurStr.c_str());
 		H1D.DetId = "All";
-	    if ( (H1D.PhysQ.compare("Energy")==0) || (H1D.PhysQ.compare("Time")==0) || (H1D.PhysQ.compare("X")==0) || (H1D.PhysQ.compare("Y")==0) || (H1D.PhysQ.compare("Z")==0) || (H1D.PhysQ.compare("Deposit")==0)) {
+	    if ( (H1D.PhysQ.compare("Energy")==0) || (H1D.PhysQ.compare("Time")==0) || (H1D.PhysQ.compare("Deposit")==0)) {
 			for (int i = 0; i < m_Detectors.size(); i++) {
 				H1D.DetId = m_Detectors[i];
 				m_H1Ds.push_back(H1D);
@@ -1187,7 +1187,7 @@ void nwlConfigParser::ReadOutput(){
 	    	    
 	    H2D.PhysQ_x  = CurStr.substr(0, found);
 
-	    if( (H2D.PhysQ_x.compare("Energy")!=0) && (H2D.PhysQ_x.compare("Time")!=0) && (H2D.PhysQ_x.compare("X")!=0) &&  (H2D.PhysQ_x.compare("Y")!=0) && (H2D.PhysQ_x.compare("Z")!=0) && (H2D.PhysQ_x.compare("ProcessID")!=0) && (H2D.PhysQ_x.compare("NucleusA")!=0) && (H2D.PhysQ_x.compare("NucleusZ")!=0)  && (H2D.PhysQ_x.compare("DetectorID")!=0)  && (H2D.PhysQ_x.compare("PDG")!=0) && (H2D.PhysQ_x.compare("DEDX")!=0) && (H2D.PhysQ_x.compare("Deposit")!=0)){
+	    if( (H2D.PhysQ_x.compare("Energy")!=0) && (H2D.PhysQ_x.compare("Time")!=0) && (H2D.PhysQ_x.compare("X")!=0) &&  (H2D.PhysQ_x.compare("Y")!=0) && (H2D.PhysQ_x.compare("Z")!=0) && (H2D.PhysQ_x.compare("ProcessID")!=0) && (H2D.PhysQ_x.compare("NucleusA")!=0) && (H2D.PhysQ_x.compare("NucleusZ")!=0)  && (H2D.PhysQ_x.compare("PDG")!=0) && (H2D.PhysQ_x.compare("Deposit")!=0)){
 	      oerr <<"\n\nERROR: " << H2D.PhysQ_x  << "is invalid value of [physical quantity x] in [H2D]" << endl;
 	      return;
 	    }
@@ -1245,16 +1245,10 @@ void nwlConfigParser::ReadOutput(){
 
 	    H2D.PhysQ_y  = CurStr.substr(0, found);
 
-	    if( (H2D.PhysQ_y.compare("Energy")!=0) && (H2D.PhysQ_y.compare("Time")!=0) && (H2D.PhysQ_y.compare("X")!=0) &&  (H2D.PhysQ_y.compare("Y")!=0) && (H2D.PhysQ_y.compare("Z")!=0) && (H2D.PhysQ_y.compare("ProcessID")!=0) && (H2D.PhysQ_y.compare("NucleusA")!=0) && (H2D.PhysQ_y.compare("NucleusZ")!=0)  && (H2D.PhysQ_y.compare("DetectorID")!=0)  && (H2D.PhysQ_y.compare("PDG")!=0) && (H2D.PhysQ_y.compare("Deposit")!=0)){
+	    if( (H2D.PhysQ_y.compare("Energy")!=0) && (H2D.PhysQ_y.compare("Time")!=0) && (H2D.PhysQ_y.compare("X")!=0) &&  (H2D.PhysQ_y.compare("Y")!=0) && (H2D.PhysQ_y.compare("Z")!=0) && (H2D.PhysQ_y.compare("ProcessID")!=0) && (H2D.PhysQ_y.compare("NucleusA")!=0) && (H2D.PhysQ_y.compare("NucleusZ")!=0)  && (H2D.PhysQ_y.compare("PDG")!=0) && (H2D.PhysQ_y.compare("Deposit")!=0)){
 	      oerr <<"\n\nERROR: " << H2D.PhysQ_y  << "is invalid value of [physical quantity y] in [H2D]" << endl;
 	      return;
 	    }
-	    
-            if( (H2D.PhysQ_x.compare("DEDX")!=0) && (H2D.PhysQ_y.compare("DetectorID")!=0) )
-            {
-              oerr << "\n\nERROR: Only DEDX vs. DetectorID is available" << endl;
-	      return;
-            }
 
 	    CurStr = CurStr.substr(found+1);
 	    while(CurStr.c_str()[0]==' '){ CurStr = CurStr.substr(1); }
@@ -1290,7 +1284,15 @@ void nwlConfigParser::ReadOutput(){
 	    
 	    H2D.Ymax = atof(CurStr.c_str());
 	    
-	    m_H2Ds.push_back(H2D);
+		H2D.DetId = "All";
+		int testi = 0;
+	    if ( (H2D.PhysQ_x.compare("Energy")==0) || (H2D.PhysQ_x.compare("Time")==0) || (H2D.PhysQ_x.compare("Deposit")==0) || (H2D.PhysQ_y.compare("Energy")==0) || (H2D.PhysQ_y.compare("Time")==0) || (H2D.PhysQ_y.compare("Deposit")==0)) {
+			for (int i = 0; i < m_Detectors.size(); i++) {
+				H2D.DetId = m_Detectors[i];
+				m_H2Ds.push_back(H2D);
+				std::cout << testi++ << std::endl;
+			}
+		} else m_H2Ds.push_back(H2D);
 	    b_H2 = true;
 
 	  } else if(Type.compare("WriteNtuple")==0) {

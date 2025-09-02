@@ -5,6 +5,7 @@
 
 struct nwlH2Record
 {
+  std::string DetId;
   std::string PhysQ_x;
   int Nbins_x;
   double Xmin;

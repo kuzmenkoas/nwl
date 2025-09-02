@@ -146,6 +146,7 @@ G4bool nwlParticleInfo::GetFirstDetectorHit(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].firstHit;
         }
+        return NULL;
 }
 
 void nwlParticleInfo::SetOutsideDetector(G4String detId) {
@@ -159,24 +160,28 @@ G4double nwlParticleInfo::GetDetectorDeposit(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].Deposit;
         }
+        return NULL;
 }
 
 G4bool nwlParticleInfo::GetOutsideDetector(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].isOutside;
         }
+        return NULL;
 }
 
 G4double nwlParticleInfo::GetDetectorKineticEnergy(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].detectorKineticEnergy;
         }
+        return NULL;
 }
 
 G4double nwlParticleInfo::GetDetectorTime(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].detectorTime;
         }
+        return NULL;
 }
 
 G4ThreeVector& nwlParticleInfo::GetEntrancePoint(G4String detId) {
@@ -195,28 +200,37 @@ G4double nwlParticleInfo::GetWeight(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].weight;
         }
+        return NULL;
 }
 
 G4bool nwlParticleInfo::GetStopInTheDetector(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].stopInTheDetector;
         }
+        return NULL;
 }
 
-G4String nwlParticleInfo::GetStopInDetectorID(G4String detId) {
+G4String nwlParticleInfo::GetStopInDetectorID() {
+        G4String res = "";
         for (G4int i = 0; i < detRecord.size(); i++) {
-                if (detRecord[i].detectorId == detId) return detRecord[i].stopInDetectorID;
+                if (detRecord[i].detectorId != res) {
+                        res = detRecord[i].detectorId;
+                        return res;
+                }
         }
+        return NULL;
 }
 
 G4String nwlParticleInfo::GetReactionInTheDetector(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return detRecord[i].reactionInTheDetector;
         }
+        return NULL;
 }
 
 G4int nwlParticleInfo::GetDetectorRecordID(G4String detId) {
         for (G4int i = 0; i < detRecord.size(); i++) {
                 if (detRecord[i].detectorId == detId) return i;
         }
+        return NULL;
 }

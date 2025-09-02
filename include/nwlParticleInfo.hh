@@ -59,7 +59,7 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4double GetDetectorTime() {return detectorTime;}
 	G4double GetDetectorKineticEnergy() {return detectorKineticEnergy;}
 	G4bool GetStopInTheDetector() {return stopInTheDetector;}
-	G4String GetStopInDetectorID() {return stopInDetectorID;}
+	// G4String GetStopInDetectorID() {return stopInDetectorID;}
 	G4String GetReactionInTheDetector() {return reactionInTheDetector;}
 	G4double GetWeight() {return weight;}
 	G4double GetDeposit() {return deposit;}
@@ -72,7 +72,7 @@ class  nwlParticleInfo : public G4VUserTrackInformation
 	G4ThreeVector& GetEntranceDirection(G4String);
 	G4double GetWeight(G4String);
 	G4bool GetStopInTheDetector(G4String detId);
-	G4String GetStopInDetectorID(G4String detId);
+	G4String GetStopInDetectorID();
 	G4String GetReactionInTheDetector(G4String detId);
 
         void Write(std::ostream& outs); 

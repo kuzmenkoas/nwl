@@ -63,10 +63,10 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
       for (it=H2Ds.begin(); it!=H2Ds.end(); ++it)
 	{
 	  // Creating histograms
-	  string hname = (*it).PhysQ_x+"_"+(*it).PhysQ_y;
+	  string hname = (*it).PhysQ_x+"_"+(*it).PhysQ_y+"_"+(*it).DetId;
 	  G4int id = analysisManager->CreateH2(hname, hname, (*it).Nbins_x, (*it).Xmin, (*it).Xmax,
 					       (*it).Nbins_y, (*it).Ymin, (*it).Ymax);
-	  pair <string, string> val ((*it).PhysQ_x, (*it).PhysQ_y); 
+	  pair <string, string> val ((*it).PhysQ_x+"_"+(*it).DetId, (*it).PhysQ_y+"_"+(*it).DetId); 
 	  H2map[id] = val;
 	}
     }
@@ -162,7 +162,7 @@ void nwlRunAction::BeginOfRunAction(const G4Run* aRun)
   // bool WriteNtuple;
 
   auto analysisManager = G4AnalysisManager::Instance();
-  analysisManager->OpenFile("run_"+std::to_string(jobID)+".csv");
+  analysisManager->OpenFile("run_"+std::to_string(jobID)+".root");
   /*
     if(cfg->GetOutput(H1Ds, H2Ds, WriteNtuple))
     {
