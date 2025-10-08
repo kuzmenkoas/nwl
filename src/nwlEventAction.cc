@@ -81,7 +81,6 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
                     else if (PhysQ == "ProcessID") { val = fRunAction->GetProcessID((*it).GetCreatorProcess()); }
                     else if (PhysQ == "NucleusA") { val = (*it).GetOriginNucleusA(); }
                     else if (PhysQ == "NucleusZ") { val = (*it).GetOriginNucleusZ(); }
-                    else if (PhysQ == "DetectorID") { val = fRunAction->GetDetectorID((*it).GetDetectorID()); }
                     else if (PhysQ == "PDG") { val = (*it).GetPDG(); }
                     else if (PhysQ == "Deposit") { val = GetDetectorTotalDeposit(&(*it), detId);}
                     G4double weight = (*it).GetWeight();
@@ -116,10 +115,6 @@ void nwlEventAction::EndOfEventAction(const G4Event* event)
                     }
                     else if (PhysQ_x == "NucleusA") { valx = (*it).GetOriginNucleusA(); }
                     else if (PhysQ_x == "NucleusZ") { valx = (*it).GetOriginNucleusZ(); }
-                    else if (PhysQ_x == "DetectorID")
-                    {
-                        valx = fRunAction->GetDetectorID((*it).GetDetectorID());
-                    }
                     else if (PhysQ_x == "PDG") { valx = (*it).GetPDG(); }
                     else if (PhysQ_x == "Deposit") { valx = GetDetectorTotalDeposit(&(*it), detId); }
 

@@ -4,7 +4,7 @@
 Nuclear Well Logging Simulation
 
 ## Installation
-1. Install Geant4 (http://cern.ch/geant4) - *current version tested against Geant4.10.06*
+1. Install Geant4 (http://cern.ch/geant4) - *current version tested against Geant4.11.3*
 2. Checkout NWL code
 3. cd nwl
 4. mkdir build
@@ -77,7 +77,7 @@ Description of source: macro with Geant4 GPS commands
 + DetectorBGO
 
 ***Configuration of the output***
-Output is stored in CSV format (can be changed to ROOT in nwlAnalysis.hh)
+Output is stored in CSV format (can be changed to ROOT in nwlRunAction.hh in variable defaultFileType)
 
 **Output**
 + H1D Energy 100 0 100     # 1D histogram
@@ -90,17 +90,18 @@ Output is stored in CSV format (can be changed to ROOT in nwlAnalysis.hh)
 
 + StoreAllParticles True
 
++ StoreDetectorMissed True
+
 Histograms may contain the following particle properties:
-* PDG - particle type
+* PDG — particle type
 * Energy — kinetic energy in the particle [MeV]
 * Time — time in the detector [ns since the start of the event]
-* X — X in the detector [mm]
-* Y — Y in the detector [mm]
-* Z — Z in the detector [mm]
+* X — X in the origin point [mm]
+* Y — Y in the origin point [mm]
+* Z — Z in the origin point [mm]
 * ProcessID — reaction ID (list of IDs is produced in the program output at every run)
 * NucleusA — A of parent nucleus
 * NucleusZ — Z of parent nucleus
-* DetectorID - ID of the detector (list of IDs is in the program output at every run)
 
 # Ntuple (a table with particle information records)
 Output is stored in CSV format (can be changed to ROOT in nwlAnalysis.hh)
@@ -116,7 +117,6 @@ Output is stored in CSV format (can be changed to ROOT in nwlAnalysis.hh)
 * string CreatorProcess 
 * int NucleusA    
 * int NucleusZ 
-* string DetectorID
 * double EntranceX 
 * double EntranceY 
 * double EntranceZ 
@@ -128,6 +128,7 @@ Output is stored in CSV format (can be changed to ROOT in nwlAnalysis.hh)
 * string StopInDetectorID 
 * string ReactionInDetector 
 * double Weight 
+* double Deposit
 
 ## Contributing
 * It's GPL

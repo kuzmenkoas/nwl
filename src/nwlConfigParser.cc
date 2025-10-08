@@ -1127,7 +1127,7 @@ void nwlConfigParser::ReadOutput(){
 	   
 	    H1D.PhysQ  = CurStr.substr(0, found);
 
-	    if( (H1D.PhysQ.compare("Energy")!=0) && (H1D.PhysQ.compare("Time")!=0) && (H1D.PhysQ.compare("X")!=0) &&  (H1D.PhysQ.compare("Y")!=0) && (H1D.PhysQ.compare("Z")!=0) && (H1D.PhysQ.compare("ProcessID")!=0) && (H1D.PhysQ.compare("NucleusA")!=0) && (H1D.PhysQ.compare("NucleusZ")!=0)  && (H1D.PhysQ.compare("DetectorID")!=0)  && (H1D.PhysQ.compare("PDG")!=0) && (H1D.PhysQ.compare("Deposit")!=0))
+	    if( (H1D.PhysQ.compare("Energy")!=0) && (H1D.PhysQ.compare("Time")!=0) && (H1D.PhysQ.compare("X")!=0) &&  (H1D.PhysQ.compare("Y")!=0) && (H1D.PhysQ.compare("Z")!=0) && (H1D.PhysQ.compare("ProcessID")!=0) && (H1D.PhysQ.compare("NucleusA")!=0) && (H1D.PhysQ.compare("NucleusZ")!=0)  && (H1D.PhysQ.compare("PDG")!=0) && (H1D.PhysQ.compare("Deposit")!=0))
             {
 	      oerr <<"\n\nERROR: " << H1D.PhysQ  << "is invalid value of [physical quantity] in [H1D]" << endl;
 	      return;

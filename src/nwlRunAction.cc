@@ -16,6 +16,7 @@ using namespace std;
 nwlRunAction::nwlRunAction() : G4UserRunAction()
 {
   auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType(defaultFileType);
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   std::vector<std::string> m_Detectors;
@@ -76,45 +77,45 @@ nwlRunAction::nwlRunAction() : G4UserRunAction()
     {
       G4int i = 0;
       for (std::vector<std::string>::iterator it = m_Detectors.begin(); it != m_Detectors.end(); it++) {
-      analysisManager->CreateNtuple("NWL_"+*it, "Well Logging Simu");
-      analysisManager->CreateNtupleIColumn("EventID");
-      analysisManager->CreateNtupleIColumn("TrackID");
-      analysisManager->CreateNtupleIColumn("ParentID");
-      analysisManager->CreateNtupleIColumn("PDG");
-      analysisManager->CreateNtupleDColumn("OriginX");
-      analysisManager->CreateNtupleDColumn("OriginY");
-      analysisManager->CreateNtupleDColumn("OriginZ");
-      analysisManager->CreateNtupleDColumn("Time");
-      analysisManager->CreateNtupleDColumn("OriginKine");
-      analysisManager->CreateNtupleSColumn("OriginVolume");
-      analysisManager->CreateNtupleSColumn("CreatorProcess");
-      analysisManager->CreateNtupleIColumn("NucleusA");
-      analysisManager->CreateNtupleIColumn("NucleusZ");
-      analysisManager->CreateNtupleDColumn("EntranceX");
-      analysisManager->CreateNtupleDColumn("EntranceY");
-      analysisManager->CreateNtupleDColumn("EntranceZ");
-      analysisManager->CreateNtupleDColumn("EntranceDirX");
-      analysisManager->CreateNtupleDColumn("EntranceDirY");
-      analysisManager->CreateNtupleDColumn("EntranceDirZ");
-      analysisManager->CreateNtupleDColumn("DetectionTime");
-      analysisManager->CreateNtupleDColumn("DetectionKine");
-      analysisManager->CreateNtupleSColumn("StopInDetectorID");
-      analysisManager->CreateNtupleSColumn("ReactionInDetector");
-      analysisManager->CreateNtupleDColumn("Weight");
-      analysisManager->CreateNtupleDColumn("Deposit");
-      analysisManager->CreateNtupleIColumn("ParentNeutronTrackID");
-      analysisManager->CreateNtupleDColumn("ParentNeutronOriginX");
-      analysisManager->CreateNtupleDColumn("ParentNeutronOriginY");
-      analysisManager->CreateNtupleDColumn("ParentNeutronOriginZ");
-      analysisManager->CreateNtupleDColumn("ParentNeutronTime");
-      analysisManager->CreateNtupleDColumn("ParentNeutronOriginKine");
-      analysisManager->CreateNtupleSColumn("ParentNeutronOriginVolume");
-      analysisManager->CreateNtupleSColumn("ParentNeutronCreatorProcess");
-      analysisManager->CreateNtupleIColumn("ParentNeutronNucleusA");
-      analysisManager->CreateNtupleIColumn("ParentNeutronNucleusZ");
+        analysisManager->CreateNtuple("NWL_"+*it, "Well Logging Simu");
+        analysisManager->CreateNtupleIColumn("EventID");
+        analysisManager->CreateNtupleIColumn("TrackID");
+        analysisManager->CreateNtupleIColumn("ParentID");
+        analysisManager->CreateNtupleIColumn("PDG");
+        analysisManager->CreateNtupleDColumn("OriginX");
+        analysisManager->CreateNtupleDColumn("OriginY");
+        analysisManager->CreateNtupleDColumn("OriginZ");
+        analysisManager->CreateNtupleDColumn("Time");
+        analysisManager->CreateNtupleDColumn("OriginKine");
+        analysisManager->CreateNtupleSColumn("OriginVolume");
+        analysisManager->CreateNtupleSColumn("CreatorProcess");
+        analysisManager->CreateNtupleIColumn("NucleusA");
+        analysisManager->CreateNtupleIColumn("NucleusZ");
+        analysisManager->CreateNtupleDColumn("EntranceX");
+        analysisManager->CreateNtupleDColumn("EntranceY");
+        analysisManager->CreateNtupleDColumn("EntranceZ");
+        analysisManager->CreateNtupleDColumn("EntranceDirX");
+        analysisManager->CreateNtupleDColumn("EntranceDirY");
+        analysisManager->CreateNtupleDColumn("EntranceDirZ");
+        analysisManager->CreateNtupleDColumn("DetectionTime");
+        analysisManager->CreateNtupleDColumn("DetectionKine");
+        analysisManager->CreateNtupleSColumn("StopInDetectorID");
+        analysisManager->CreateNtupleSColumn("ReactionInDetector");
+        analysisManager->CreateNtupleDColumn("Weight");
+        analysisManager->CreateNtupleDColumn("Deposit");
+        analysisManager->CreateNtupleIColumn("ParentNeutronTrackID");
+        analysisManager->CreateNtupleDColumn("ParentNeutronOriginX");
+        analysisManager->CreateNtupleDColumn("ParentNeutronOriginY");
+        analysisManager->CreateNtupleDColumn("ParentNeutronOriginZ");
+        analysisManager->CreateNtupleDColumn("ParentNeutronTime");
+        analysisManager->CreateNtupleDColumn("ParentNeutronOriginKine");
+        analysisManager->CreateNtupleSColumn("ParentNeutronOriginVolume");
+        analysisManager->CreateNtupleSColumn("ParentNeutronCreatorProcess");
+        analysisManager->CreateNtupleIColumn("ParentNeutronNucleusA");
+        analysisManager->CreateNtupleIColumn("ParentNeutronNucleusZ");
 
-      analysisManager->FinishNtuple(i++);
-    }
+        analysisManager->FinishNtuple(i++);
+      }
     }
 }
 
@@ -162,7 +163,7 @@ void nwlRunAction::BeginOfRunAction(const G4Run* aRun)
   // bool WriteNtuple;
 
   auto analysisManager = G4AnalysisManager::Instance();
-  analysisManager->OpenFile("run_"+std::to_string(jobID)+".csv");
+  analysisManager->OpenFile("run_"+std::to_string(jobID));
   /*
     if(cfg->GetOutput(H1Ds, H2Ds, WriteNtuple))
     {
