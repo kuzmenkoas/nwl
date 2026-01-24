@@ -43,7 +43,7 @@ private:
   std::map<G4int, std::string> H1map;
   std::map<G4int, std::pair<std::string, std::string> > H2map;
 
-  G4String defaultFileType = "csv";
+  G4String defaultFileType = NWLOUTPUT;
 };
 
 #endif

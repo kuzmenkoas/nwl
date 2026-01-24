@@ -3,6 +3,9 @@
 cmake_minimum_required(VERSION 3.0...4.2 FATAL_ERROR)
 project(NWL)
 
+set(NWLOUTPUT "csv" CACHE PATH "Output format (csv or root)")
+add_definitions(-DNWLOUTPUT="${NWLOUTPUT}")
+
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
