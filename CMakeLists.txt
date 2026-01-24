@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0...4.2 FATAL_ERROR)
 project(NWL)
 
 #----------------------------------------------------------------------------
@@ -60,6 +60,6 @@ add_custom_target(NWL DEPENDS nwl.exe)
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS nwl.exe DESTINATION .)
+install(TARGETS nwl.exe DESTINATION bin)
 
 
