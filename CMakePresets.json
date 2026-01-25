@@ -1,0 +1,40 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "csv",
+            "displayName": "Build csv output",
+            "cacheVariables": {
+                "NWLOUTPUT": {
+                    "type": "STRING",
+                    "value": "csv"
+                }
+            }
+        },
+        {
+            "name": "root",
+            "displayName": "Build root output",
+            "cacheVariables": {
+                "NWLOUTPUT": {
+                    "type": "STRING",
+                    "value": "root"
+                }
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "csv",
+            "configurePreset": "csv"
+        },
+        {
+            "name": "root",
+            "configurePreset": "root"
+        }
+    ]
+}
