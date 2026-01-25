@@ -4,12 +4,12 @@
 Nuclear Well Logging Simulation
 
 ## Installation
-1. Install Geant4 (http://cern.ch/geant4) - *current version tested against Geant4.11.3*
+1. Install Geant4 (http://cern.ch/geant4) - *current version tested against Geant4.11.4*
 2. Checkout NWL code
 3. cd nwl
-4. mkdir build
-5. cmake ..
-6. make
+4. cmake -B build -S . --preset=csv(root)
+5. cmake --build build --preset=csv(root)
+6. cmake --install build (Will install in /usr/local/bin with possibility to call nwl.exe from any directory)
 
 ## Usage
 ./nwl.exe configfile.cfg        -- interactive mode
